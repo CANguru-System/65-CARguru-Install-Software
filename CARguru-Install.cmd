@@ -1,4 +1,3 @@
-
 @echo off
 SET COMPORT=COM3
 
@@ -7,6 +6,9 @@ SET COMPORT=COM3
 cls
 echo.
 echo CARguru - Helper
+echo.
+echo USB-Anschlüsse::
+call files
 echo.
 echo Bitte waehlen Sie eine der folgenden Optionen:
 echo. 
@@ -93,7 +95,8 @@ goto :loop
 
 :CARguru
 @echo on
-esptool.exe -p %COMPORT% -b 460800 --before default_reset --after hard_reset --chip esp32 write_flash --flash_mode dio --flash_freq 80m --flash_size detect 0x00001000 show_IP-Address/bootloader.bin 0x00008000 show_IP-Address/partitions.bin 0x00010000 show_IP-Address/firmware.bin
+rem esptool.exe --chip esp32 --port %COMPORT% erase_flash
+esptool.exe --chip esp32 --port %COMPORT% --baud 460800 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 4MB 0x1000 show_IP-Address/bootloader.bin 0x8000 show_IP-Address/partitions.bin 0xe000 show_IP-Address/boot_app0.bin 0x10000 show_IP-Address/firmware.bin
 @echo off
 echo.
 pause
@@ -109,8 +112,9 @@ goto :loop
 
 :littlefs
 @echo on
-mklittlefs.exe -c LITTLEFS -s 0x16F000 -b 4096 -p 256 -- littlefs.bin
-esptool.exe --chip esp32 --port %COMPORT% --baud 115200 write_flash -z 0x291000 littlefs.bin
+rem 
+mklittlefs.exe -c LITTLEFS -s 0x170000 -b 4096 -p 256 -- littlefs.bin
+esptool.exe --chip esp32 --port %COMPORT% --baud 115200 write_flash -z 0x290000 littlefs.bin
 @echo off
 echo.
 pause
