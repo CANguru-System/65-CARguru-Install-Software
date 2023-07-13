@@ -7,7 +7,7 @@ cls
 echo.
 echo CARguru - Helper
 echo.
-echo USB-Anschlüsse::
+echo USB-Anschluesse::
 call files
 echo.
 echo Bitte waehlen Sie eine der folgenden Optionen:
